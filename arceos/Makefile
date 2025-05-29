@@ -28,7 +28,7 @@
 
 # General options
 ARCH ?= riscv64
-PLATFORM ?=
+PLATFORM = riscv64-qemu-virt
 SMP ?= 1
 MODE ?= release
 LOG ?= warn

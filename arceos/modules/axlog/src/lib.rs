@@ -76,7 +76,8 @@ macro_rules! ax_print {
 macro_rules! ax_println {
     () => { $crate::ax_print!("\n") };
     ($($arg:tt)*) => {
-        $crate::__print_impl(format_args!("{}\n", format_args!($($arg)*)));
+        // $crate::__print_impl(format_args!("{}\n", format_args!($($arg)*)));
+        $crate::__print_impl(format_args!("\u{1B}[32m{}\u{1B}[0m\n", format_args!($($arg)*)));
     }
 }
 

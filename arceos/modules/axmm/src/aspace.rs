@@ -16,7 +16,7 @@ use alloc::vec::Vec;
 
 /// The virtual memory address space.
 pub struct AddrSpace {
-    va_range: VirtAddrRange,
+    pub va_range: VirtAddrRange,
     areas: MemorySet<Backend>,
     pt: PageTable,
 }

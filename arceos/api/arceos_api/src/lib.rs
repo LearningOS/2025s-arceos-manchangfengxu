@@ -22,6 +22,12 @@ mod imp;
 
 pub use axerrno::{AxError, AxResult};
 
+pub mod random {
+    pub fn random() -> u128 {
+        axhal::misc::random()
+    }
+}
+
 /// Platform-specific constants and parameters.
 pub mod config {
     pub use axconfig::*;

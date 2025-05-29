@@ -36,9 +36,9 @@ fn main() {
     }
 
     // Init user stack.
-    let ustack_top = init_user_stack(&mut uspace, true).unwrap();
+    let ustack_top = init_user_stack(&mut uspace, false).unwrap();
     ax_println!("New user address space: {:#x?}", uspace);
-
+warn!("aaa");
     // Let's kick off the user process.
     let user_task = task::spawn_user_task(
         Arc::new(Mutex::new(uspace)),

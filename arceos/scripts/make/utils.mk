@@ -35,15 +35,29 @@ endef
 
 define setup_disk
   $(call build_origin)
+  $(call build_skernel2)
+
   @mkdir -p ./mnt
   @sudo mount $(1) ./mnt
   @sudo mkdir -p ./mnt/sbin
-  @sudo cp /tmp/origin.bin ./mnt/sbin
+  @sudo cp /tmp/origin.bin ./mnt/sbin/origin
+  @sudo cp /tmp/skernel2.bin ./mnt/sbin/skernel2
+
   @sudo umount ./mnt
-  @rm -rf mnt
+  @sudo rm -rf mnt
 endef
 
 define build_origin
   @RUSTFLAGS="" cargo build -p origin  --target riscv64gc-unknown-none-elf --release
   @rust-objcopy --binary-architecture=riscv64 --strip-all -O binary ./target/riscv64gc-unknown-none-elf/release/origin /tmp/origin.bin
 endef
+
+define build_skernel2
+  @RUSTFLAGS="" cargo build -p skernel2  --target riscv64gc-unknown-none-elf --release
+  @rust-objcopy --binary-architecture=riscv64 --strip-all -O binary ./target/riscv64gc-unknown-none-elf/release/skernel2 /tmp/skernel2.bin
+endef
+
+# define build_mapfile
+#   @make -C arceos/payload/mapfile_c
+#   @cp ./payload/mapfile_c/mapfile /tmp/mapfile.bin
+# endef

@@ -1,12 +1,12 @@
+
 use alloc::collections::BTreeMap;
 use alloc::sync::{Arc, Weak};
 use alloc::{string::String, vec::Vec};
 
+use crate::file::FileNode;
 use axfs_vfs::{VfsDirEntry, VfsNodeAttr, VfsNodeOps, VfsNodeRef, VfsNodeType};
 use axfs_vfs::{VfsError, VfsResult};
 use spin::RwLock;
-
-use crate::file::FileNode;
 
 /// The directory node in the RAM filesystem.
 ///
@@ -97,6 +97,32 @@ impl VfsNodeOps for DirNode {
             Ok(node)
         }
     }
+    /// Renames or moves existing file or directory.
+    fn rename(&self, src_path: &str, dst_path: &str) -> VfsResult {
+        log::warn!("{:?}, {:?}", src_path, dst_path);
+        let (src_name, src_rest) = split_path(src_path);
+        let (mut dst_name, dst_rest) = split_path(dst_path);
+        log::warn!("split_path");
+        if src_rest.is_some() || dst_rest.is_some() {
+            log::warn!("not a file");
+            log::warn!(
+                "{:?}, {:?}, {:?}, {:?}",
+                src_name,
+                src_rest,
+                dst_name,
+                dst_rest
+            );
+            dst_name = split_path_to_end(dst_rest.unwrap());
+        }
+
+        let mut children = self.children.write();
+        log::warn!("get writeable child");
+        let src_node = children.remove(src_name).ok_or(VfsError::NotFound)?;
+
+        children.insert(dst_name.into(), src_node);
+        log::warn!("rename {} to {} at ramfs", src_path, dst_path);
+        Ok(())
+    }
 
     fn read_dir(&self, start_idx: usize, dirents: &mut [VfsDirEntry]) -> VfsResult<usize> {
         let children = self.children.read();
@@ -173,4 +199,16 @@ fn split_path(path: &str) -> (&str, Option<&str>) {
     trimmed_path.find('/').map_or((trimmed_path, None), |n| {
         (&trimmed_path[..n], Some(&trimmed_path[n + 1..]))
     })
+}
+
+fn split_path_to_end(path: &str) -> &str {
+    let trimmed_path = path.trim_start_matches('/');
+    let result = trimmed_path.find('/').map_or((trimmed_path, None), |n| {
+        (&trimmed_path[..n], Some(&trimmed_path[n + 1..]))
+    });
+    if result.1 != None {
+        return split_path_to_end(result.1.unwrap());
+    }else {
+        return result.0;
+    }
 }
