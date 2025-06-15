@@ -45,9 +45,9 @@ jobs:
           cargo install cargo-binutils
 
           mkdir -p /opt/musl && cd /opt/musl
-          wget https://musl.cc/aarch64-linux-musl-cross.tgz
-          wget https://musl.cc/riscv64-linux-musl-cross.tgz
-          wget https://musl.cc/x86_64-linux-musl-cross.tgz
+          wget -O aarch64-linux-musl-cross.tgz "https://2007.filemail.com/api/file/get?filekey=LxrKGyRFs6OVWEZNq60qhgkDlLjIXHyIs_6EMoMGy4t_sOUgaGu8yn4Q7U-asul5b2iXl6QnYdqsOmxebE0&pk_vid=35e1be04563a40a917499796211deef3"
+          wget -O riscv64-linux-musl-cross.tgz "https://2007.filemail.com/api/file/get?filekey=_WtBcGO7Iuh4N4pH-41ZwQk_fxJK1ZmHnpKSSShH7k-BiA18nvfypSZ06Fsp6Fc4w52CdqlWgPo8npJ9jIE&pk_vid=35e1be04563a40a917499796541deef3"
+          wget -O x86_64-linux-musl-cross.tgz "https://2007.filemail.com/api/file/get?filekey=vTtGHuNtRpM5Qpg-EocGvLsp7Ov6D5vYRulEoapNZjlWvS011JhEd-5hDQ8Bh3wh6JO5RUo-kxNKChu8VQ&pk_vid=35e1be04563a40a917499796641deef3"
           tar zxf aarch64-linux-musl-cross.tgz
           tar zxf riscv64-linux-musl-cross.tgz
           tar zxf x86_64-linux-musl-cross.tgz
